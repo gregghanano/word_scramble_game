@@ -2,13 +2,17 @@
 <head>
 	<title>Word Scramble</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
-	<script type="text/javascript">
-		
-	</script>
+	<script type="text/javascript" src='app.js'></script>
+	<link rel='stylesheet' href='style.css'>
 </head>
 <body>
-	<div ng-controller=''>
-		
+	<div ng-controller='wordController'>
+		<h2>{{details.word}}<h2>
+		<table>
+			<tr>
+				<td class='letter-blocks' ng-repeat="letter in letters"><span class='letters'>{{letter}}</span><td>
+			</tr>
+		</table>
 
 	</div>
 </body>
