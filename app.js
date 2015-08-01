@@ -1,11 +1,17 @@
 var myApp = angular.module('myApp', []);
 
 	myApp.controller('wordController', function ($scope, $http){
-		$scope.details={};
+		window.addEventListener('keydown', function(e){
+			console.log(e.keyCode);
+		});
+		
+		$scope.details = {};
 		$scope.letters = {};
-
+		
+		//api call
 		(function fetch(){
-			$http.get('http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=true&excludePartOfSpeech=proper-noun&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=5&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5')
+			var path = 'http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=adverb&excludePartOfSpeech=verb&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=8&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
+			$http.get(path)
 			.success(function(response){
 				$scope.details = response;
 				console.log($scope.details);
@@ -25,4 +31,10 @@ var myApp = angular.module('myApp', []);
 				console.log($scope.letters);
 				});
 			})();
+		//----end api call
+
+
+		$scope.keyPress = function(keyCode){
+			console.log(keyCode);
+		}
 	});

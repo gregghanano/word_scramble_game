@@ -6,14 +6,15 @@
 	<link rel='stylesheet' href='style.css'>
 </head>
 <body>
-	<div ng-controller='wordController'>
+	<div id='container'>
+	<div ng-controller='wordController' ng-keypress="keyPress($event.keyCode)">
 		<h2>{{details.word}}<h2>
 		<table>
 			<tr>
 				<td class='letter-blocks' ng-repeat="letter in letters"><span class='letters'>{{letter}}</span><td>
 			</tr>
 		</table>
-
+	</div>
 	</div>
 </body>
 </html>
