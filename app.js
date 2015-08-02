@@ -1,21 +1,22 @@
-var myApp = angular.module('myApp', []);
+var myApp = angular.module('myApp',[]);
 
 	myApp.controller('wordController', function ($scope, $http){
+		$scope.details = {};
+		$scope.correctWord = [];
+		$scope.shuffledWord = [];
+		$scope.letters = [];
+		$scope.guessedLetters = []; // for checking but can later be removed
+		console.log($scope.guessedLetters);
+		if($scope.guessedLetters.length === $scope.correctWord.length && !$scope.guessedLetters){
+			console.log("/////////   check for correctness now!");
+		}
 		window.addEventListener('keydown', function(e){
 			console.log(e.keyCode);
 			var value = String.fromCharCode(e.keyCode).toLowerCase();
 			console.log(value);
-			$scope.checkLetter(value);
-			// if(e.keyCode === 13){
-			// 	// check if word is right first
-			// 	$scope.randomWord();
-			// }
+			$scope.checkLetter(value, e.keyCode);
 		});
-		
-		$scope.details = {};
-		$scope.correctWord = [];
-		$scope.letters = [];
-		
+
 		//api call
 		$scope.randomWord = function(){
 			var path = 'http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=adverb&excludePartOfSpeech=verb&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=8&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
@@ -42,34 +43,67 @@ var myApp = angular.module('myApp', []);
 			    word = word.substr(0, charIndex) + word.substr(charIndex + 1);
 			}
 
-			var array = scrambled.split('');
+			$scope.shuffledWord = scrambled.split('');
 			
-			for(var i in array){
+			for(var i in $scope.shuffledWord){
 				// $scope.letter = {};
 				// $scope.letter.character = array[i];
 				// $scope.letter.used = false;
 				$scope.letters.push({
-					letter : array[i],
+					letter : $scope.shuffledWord[i],
 					used : false
 				});
 			}
 			console.log($scope.letters);
 		}
 
-		$scope.checkLetter = function(typedLetter){
+
+		$scope.checkLetter = function(typedLetter, keyCode){
 			console.log('letter typed = ' + typedLetter);
-			for(var i in $scope.correctWord){
-				if(typedLetter === $scope.correctWord[i]){
+			if(keyCode === 8){
+				//delete guessed letter
+				e.preventDefault();
+			}
+			for(var i=0; i<$scope.letters.length; i++){
+				if($scope.letters[i].letter === typedLetter && $scope.letters[i].used === false){
+					var index = $scope.letters.indexOf($scope.letters[i]);
+					$scope.letters[i].used = true;
 					console.log('the letter ' + typedLetter + ' is in there' );
+					return $scope.rearrangeWord(typedLetter, keyCode, index);
 					//re-arrange letters function
+					//$scope.rearrangeWord(typedLetter, keyCode, index);
 
 				}
 			}
 		}
 
-		$scope.rearrangeWord = function(typedLetter){
+		$scope.rearrangeWord = function(typedLetter, keyCode, index){
 			//take the type letter and find the matching
 			// letter in the array, switch to front
+			if(keyCode === 8){
+				//delete guessed letter
+				e.preventDefault();
+			} else {
+				if(index > -1){
+					console.log(index);
+					console.log($scope.letters);
+					var temp = $scope.letters[index];
+					console.log(temp);
+					for(var i = 0; i < $scope.letters.length; i++){
+						if($scope.letters.indexOf($scope.letters[i]) === index){
+							return;
+						}
+						if($scope.letters[i].used === false){
+							$scope.letters[index] = $scope.letters[i];
+							$scope.letters[i] = temp;
+							return;
+						}
+					}
+					
+				}
+			}
+
+
 		}
 
 	});
