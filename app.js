@@ -3,10 +3,13 @@ var myApp = angular.module('myApp', []);
 	myApp.controller('wordController', function ($scope, $http){
 		window.addEventListener('keydown', function(e){
 			console.log(e.keyCode);
-			if(e.keyCode === 13){
-				// check if word is right first
-				$scope.randomWord();
-			}
+			var value = String.fromCharCode(e.keyCode).toLowerCase();
+			console.log(value);
+			$scope.checkLetter(value);
+			// if(e.keyCode === 13){
+			// 	// check if word is right first
+			// 	$scope.randomWord();
+			// }
 		});
 		
 		$scope.details = {};
@@ -21,6 +24,7 @@ var myApp = angular.module('myApp', []);
 				console.log($scope.details);
 				$scope.correctWord = $scope.details.word.split('');
 				$scope.shuffleWord($scope.details.word);
+				console.log($scope.correctWord);
 			})
 		}
 		$scope.randomWord();
@@ -52,8 +56,44 @@ var myApp = angular.module('myApp', []);
 			console.log($scope.letters);
 		}
 
+		$scope.checkLetter = function(typedLetter){
+			console.log('letter typed = ' + typedLetter);
+			for(var i in $scope.correctWord){
+				if(typedLetter === $scope.correctWord[i]){
+					console.log('the letter ' + typedLetter + ' is in there' );
+					//re-arrange letters function
 
-		$scope.keyPress = function(keyCode){
-			console.log(keyCode);
+				}
+			}
 		}
+
+		$scope.rearrangeWord = function(typedLetter){
+			//take the type letter and find the matching
+			// letter in the array, switch to front
+		}
+
 	});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
