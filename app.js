@@ -16,6 +16,9 @@ var myApp = angular.module('myApp',[]);
 			console.log(value);
 			$scope.checkLetter(value, e.keyCode);
 		});
+		$scope.getLetters = function(){
+			return $scope.letters;
+		}
 
 		//api call
 		$scope.randomWord = function(){
@@ -46,9 +49,6 @@ var myApp = angular.module('myApp',[]);
 			$scope.shuffledWord = scrambled.split('');
 			
 			for(var i in $scope.shuffledWord){
-				// $scope.letter = {};
-				// $scope.letter.character = array[i];
-				// $scope.letter.used = false;
 				$scope.letters.push({
 					letter : $scope.shuffledWord[i],
 					used : false
@@ -62,6 +62,10 @@ var myApp = angular.module('myApp',[]);
 			console.log('letter typed = ' + typedLetter);
 			if(keyCode === 8){
 				//delete guessed letter
+				//go back wards through the array and 
+				// change the first used === true to 
+				// used === false
+				// possibly rearrange to show change
 				e.preventDefault();
 			}
 			for(var i=0; i<$scope.letters.length; i++){
@@ -82,6 +86,7 @@ var myApp = angular.module('myApp',[]);
 			// letter in the array, switch to front
 			if(keyCode === 8){
 				//delete guessed letter
+				// might not need this
 				e.preventDefault();
 			} else {
 				if(index > -1){
@@ -96,14 +101,22 @@ var myApp = angular.module('myApp',[]);
 						if($scope.letters[i].used === false){
 							$scope.letters[index] = $scope.letters[i];
 							$scope.letters[i] = temp;
-							return;
+							// console.log($scope.letters);
+							var newObjs = $scope.letters;
+							return $scope.addObjs(newObjs);
 						}
 					}
 					
 				}
 			}
 
-
+		}
+		$scope.addObjs = function(objects){
+			$scope.letters = [];
+			for(var i = 0; i < objects.length; i++){
+				$scope.letters.push(objects[i]);
+			}
+			console.log($scope.letters);
 		}
 
 	});
