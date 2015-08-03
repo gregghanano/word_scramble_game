@@ -1,12 +1,17 @@
-var myApp = angular.module('myApp',[]);
 myApp.controller('wordScramble',function ($scope, $http){
+	var socket = io.connect();
 	$scope.details = {};
-	console.log($scope.details);
 	$scope.correctWord = [];
 	$scope.shuffledWord = [];
 	$scope.letters = [];
 	$scope.guessedLetters = []; // for checking but can later be removed
-	console.log($scope.guessedLetters);
+
+	socket.on('setWords', function(data){
+		console.log('in setWords socket');
+		console.log('socket data');
+		console.log(data);
+		$scope.letters=data;
+	})
 
 	window.addEventListener('keydown', function(e){
 			console.log(e.keyCode);
@@ -48,6 +53,7 @@ myApp.controller('wordScramble',function ($scope, $http){
 			});
 		}
 		console.log($scope.letters);
+		socket.emit('shuffledWords', $scope.letters);
 	}
 
 	$scope.checkLetter = function(typedLetter, keyCode){
@@ -92,7 +98,8 @@ myApp.controller('wordScramble',function ($scope, $http){
 					if($scope.letters[i].used === false){
 						$scope.letters[index] = $scope.letters[i];
 						$scope.letters[i] = temp;
-						return;
+						console.log($scope.letters);
+						return socket.emit('rearrangeWord', $scope.letters);
 					}
 					
 				}
