@@ -6,9 +6,9 @@ app.set('port', (process.env.PORT || 8000));
 
 app.use(express.static(path.join(__dirname, '/')));
 
-// app.get('/', function(req, res){
-// 	res.sendfile('index.html');
-// });
+app.get('/', function(req, res){
+	res.render('index');
+});
 
 var server = app.listen(app.get('port'), function(){
 	console.log('Node app is running on port', app.get('port'));
