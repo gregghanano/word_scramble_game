@@ -1,202 +1,106 @@
 var myApp = angular.module('myApp',[]);
-myApp.controller('', ['$scope',
-	function ($scope){
+myApp.controller('wordScramble',function ($scope, $http){
+	$scope.details = {};
+	console.log($scope.details);
+	$scope.correctWord = [];
+	$scope.shuffledWord = [];
+	$scope.letters = [];
+	$scope.guessedLetters = []; // for checking but can later be removed
+	console.log($scope.guessedLetters);
 
-	}]);
-	myApp.directive('wordscramble', function(){
-		function linking(scope, element, attrs){
-			scope.randomWord();
-			window.addEventListener('keydown', function(e){
+	window.addEventListener('keydown', function(e){
 			console.log(e.keyCode);
 			var value = String.fromCharCode(e.keyCode).toLowerCase();
 			console.log(value);
 			$scope.checkLetter(value, e.keyCode);
-<<<<<<< HEAD
-			}, false);
-		}
-		function controller($scope, $http){
-=======
-		});
->>>>>>> parent of 40d143f... working on dynamic updates
 
-			$scope.details = {};
+	}]);
+
+	$scope.randomWord = function(){
+		var path = 'http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=adverb&excludePartOfSpeech=verb&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=8&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
+		$http.get(path).success(function(response){
+			$scope.details = response;
 			console.log($scope.details);
-			$scope.correctWord = [];
-			$scope.shuffledWord = [];
-			$scope.letters = [];
-			$scope.guessedLetters = []; // for checking but can later be removed
-			console.log($scope.guessedLetters);
-			if($scope.guessedLetters.length === $scope.correctWord.length && !$scope.guessedLetters){
-				console.log("/////////   check for correctness now!");
-			}
-<<<<<<< HEAD
-			// window.addEventListener('keydown', function(e){
-			// 	console.log(e.keyCode);
-			// 	var value = String.fromCharCode(e.keyCode).toLowerCase();
-			// 	console.log(value);
-			// 	$scope.checkLetter(value, e.keyCode);
-			// });
-			$scope.getLetters = function(){
-				return $scope.letters;
-=======
+			$scope.correctWord = $scope.details.word.split('');
+			$scope.shuffleWord($scope.details.word);
+			console.log($scope.correctWord);
+		})
+	}
+	$scope.randomWord();
 
-			$scope.shuffledWord = scrambled.split('');
-			
-			for(var i in $scope.shuffledWord){
-				// $scope.letter = {};
-				// $scope.letter.character = array[i];
-				// $scope.letter.used = false;
-				$scope.letters.push({
-					letter : $scope.shuffledWord[i],
-					used : false
-				});
->>>>>>> parent of 40d143f... working on dynamic updates
-			}
+	$scope.shuffleWord = function(string){
+		console.log(string);
+		var word = string
+		var wordLength = word.length;
+		var scrambled = '';
 
-			//api call
-			$scope.randomWord = function(){
-				var path = 'http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=true&includePartOfSpeech=adverb&excludePartOfSpeech=verb&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=8&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5';
-				$http.get(path).success(function(response){
-					$scope.details = response;
-					console.log($scope.details);
-					$scope.correctWord = $scope.details.word.split('');
-					$scope.shuffleWord($scope.details.word);
-					console.log($scope.correctWord);
-				})
-			}
-			// $scope.randomWord();
-			//end api call;
-
-			$scope.shuffleWord = function(string){
-				console.log(string);
-				var word = string
-				var wordLength = word.length;
-				var scrambled = '';
-
-				for (var i = 0; i < wordLength; i++) {
-				    var charIndex = Math.floor(Math.random() * word.length);
-				    scrambled += word.charAt(charIndex);
-				    word = word.substr(0, charIndex) + word.substr(charIndex + 1);
-				}
-
-<<<<<<< HEAD
-				$scope.shuffledWord = scrambled.split('');
-				
-				for(var i in $scope.shuffledWord){
-					$scope.letters.push({
-						letter : $scope.shuffledWord[i],
-						used : false
-					});
-				}
-				console.log($scope.letters);
-=======
-		$scope.checkLetter = function(typedLetter, keyCode){
-			console.log('letter typed = ' + typedLetter);
-			if(keyCode === 8){
-				//delete guessed letter
-				e.preventDefault();
->>>>>>> parent of 40d143f... working on dynamic updates
-			}
-
-
-			$scope.checkLetter = function(typedLetter, keyCode){
-				console.log('letter typed = ' + typedLetter);
-				if(keyCode === 8){
-					//delete guessed letter
-					//go back wards through the array and 
-					// change the first used === true to 
-					// used === false
-					// possibly rearrange to show change
-					e.preventDefault();
-				}
-				for(var i=0; i<$scope.letters.length; i++){
-					if($scope.letters[i].letter === typedLetter && $scope.letters[i].used === false){
-						var index = $scope.letters.indexOf($scope.letters[i]);
-						$scope.letters[i].used = true;
-						console.log('the letter ' + typedLetter + ' is in there' );
-						return $scope.rearrangeWord(typedLetter, keyCode, index);
-						//re-arrange letters function
-						//$scope.rearrangeWord(typedLetter, keyCode, index);
-
-					}
-				}
-			}
-
-<<<<<<< HEAD
-			$scope.rearrangeWord = function(typedLetter, keyCode, index){
-				//take the type letter and find the matching
-				// letter in the array, switch to front
-				if(keyCode === 8){
-					//delete guessed letter
-					// might not need this
-					e.preventDefault();
-				} else {
-					if(index > -1){
-						console.log(index);
-						console.log($scope.letters);
-						var temp = $scope.letters[index];
-						console.log(temp);
-						for(var i = 0; i < $scope.letters.length; i++){
-							if($scope.letters.indexOf($scope.letters[i]) === index){
-								return;
-							}
-							if($scope.letters[i].used === false){
-								$scope.letters[index] = $scope.letters[i];
-								$scope.letters[i] = temp;
-								// console.log($scope.letters);
-								var newObjs = $scope.letters;
-								return $scope.addObjs(newObjs);
-							}
-=======
-		$scope.rearrangeWord = function(typedLetter, keyCode, index){
-			//take the type letter and find the matching
-			// letter in the array, switch to front
-			if(keyCode === 8){
-				//delete guessed letter
-				e.preventDefault();
-			} else {
-				if(index > -1){
-					console.log(index);
-					console.log($scope.letters);
-					var temp = $scope.letters[index];
-					console.log(temp);
-					for(var i = 0; i < $scope.letters.length; i++){
-						if($scope.letters.indexOf($scope.letters[i]) === index){
-							return;
-						}
-						if($scope.letters[i].used === false){
-							$scope.letters[index] = $scope.letters[i];
-							$scope.letters[i] = temp;
-							return;
->>>>>>> parent of 40d143f... working on dynamic updates
-						}
-						
-					}
-				}
-
-<<<<<<< HEAD
-			}
-			$scope.addObjs = function(objects){
-				$scope.letters = [];
-				for(var i = 0; i < objects.length; i++){
-					$scope.letters.push(objects[i]);
-				}
-				console.log($scope.letters);
-			}
-=======
-
+		for (var i = 0; i < wordLength; i++) {
+		    var charIndex = Math.floor(Math.random() * word.length);
+		    scrambled += word.charAt(charIndex);
+		    word = word.substr(0, charIndex) + word.substr(charIndex + 1);
 		}
->>>>>>> parent of 40d143f... working on dynamic updates
 
+		$scope.shuffledWord = scrambled.split('');
+		
+		for(var i in $scope.shuffledWord){
+			$scope.letters.push({
+				letter : $scope.shuffledWord[i],
+				used : false
+			});
 		}
-		return {
-        restrict: 'E',
-        templateUrl:"wordscramble.html",
-        scope: {},
-        link: linking,
-        controller: controller
-    };
-	});
+		console.log($scope.letters);
+	}
+
+	$scope.checkLetter = function(typedLetter, keyCode){
+		console.log('letter typed = ' + typedLetter);
+		if(keyCode === 8){
+			//delete guessed letter
+			//go back wards through the array and 
+			// change the first used === true to 
+			// used === false
+			// possibly rearrange to show change
+			e.preventDefault();
+		}
+		for(var i=0; i<$scope.letters.length; i++){
+			if($scope.letters[i].letter === typedLetter && $scope.letters[i].used === false){
+				var index = $scope.letters.indexOf($scope.letters[i]);
+				$scope.letters[i].used = true;
+				console.log('the letter ' + typedLetter + ' is in there' );
+				return $scope.rearrangeWord(typedLetter, keyCode, index);
+				//re-arrange letters function
+				//$scope.rearrangeWord(typedLetter, keyCode, index);
+
+			}
+		}
+	}
+
+	$scope.rearrangeWord = function(typedLetter, keyCode, index){
+		//take the type letter and find the matching
+		// letter in the array, switch to front
+		if(keyCode === 8){
+			//delete guessed letter
+			e.preventDefault();
+		} else {
+			if(index > -1){
+				console.log(index);
+				console.log($scope.letters);
+				var temp = $scope.letters[index];
+				console.log(temp);
+				for(var i = 0; i < $scope.letters.length; i++){
+					if($scope.letters.indexOf($scope.letters[i]) === index){
+						return;
+					}
+					if($scope.letters[i].used === false){
+						$scope.letters[index] = $scope.letters[i];
+						$scope.letters[i] = temp;
+						return;
+					}
+					
+				}
+			}
+		}
+	}
+});
 
 
 

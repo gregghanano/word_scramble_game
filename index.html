@@ -6,6 +6,16 @@
 	<link rel='stylesheet' href='style.css'>
 </head>
 <body>
-	<wordscramble></wordscramble>
+	<div ng-controller='wordScramble'>
+	<h2>{{details.word}}<h2>
+	<table>
+		<tr>
+			<td class='letter-blocks' ng-repeat="letter in letters" ng-hide='letter.used'
+				bn-log-dom-creation="With"
+				><span class='letters'>{{letter.letter}}</span>
+			<td>
+		</tr>
+	</table>
+</div>
 </body>
 </html>
